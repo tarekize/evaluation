@@ -81,11 +81,21 @@ def add_matter_4_iterator(cls):
 
 @add_matter_4_iterator
 class SchoolClass(Iterable):
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(SchoolClass, cls).__new__(cls, *args, **kwargs)
+            cls._instance.students = []
+        return cls._instance
+
     def __init__(self):
-        self.students = []
+        # L'initialisation est désormais gérée dans __new__ pour garantir le Singleton
+        pass
 
     def add_student(self, student: Student):
-        self.students.append(student)
+        if student not in self.students:
+            self.students.append(student)
 
     def __iter__(self):
         return Matter1Iterator(self.students)
@@ -121,3 +131,8 @@ if __name__ == '__main__':
     print("\n--- Vérification de la Matière 4 et de la nouvelle moyenne ---")
     for student in school_class.students:
         print(f"{student.name} - Mat4: {student.subject4} - Moyenne (sur 4): {student.average:.2f}")
+
+    print("\n--- Vérification du Singleton ---")
+    another_school_class = SchoolClass()
+    print(f"school_class et another_school_class sont la même instance : {school_class is another_school_class}")
+    print(f"Nombre d'élèves dans another_school_class: {len(another_school_class.students)}")
