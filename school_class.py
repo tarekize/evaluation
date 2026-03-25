@@ -21,9 +21,21 @@ class SchoolClass:
         for s in sorted(self.students, key=lambda x: x.subject1, reverse=True):
             print(f"{s.name} : {s.subject1}")
 
+    def rank_matter_2(self):
+        print("--- Classement Matière 2 ---")
+        for s in sorted(self.students, key=lambda x: x.subject2, reverse=True):
+            print(f"{s.name} : {s.subject2}")
+
+    def rank_matter_3(self):
+        print("--- Classement Matière 3 ---")
+        for s in sorted(self.students, key=lambda x: x.subject3, reverse=True):
+            print(f"{s.name} : {s.subject3}")
+
 if __name__ == '__main__':
     school_class = SchoolClass()
     school_class.add_student(Student('J', 10, 12, 13))
     school_class.add_student(Student('A', 8, 2, 17))
     school_class.add_student(Student('V', 9, 14, 14))
     school_class.rank_matter_1()
+    school_class.rank_matter_2()
+    school_class.rank_matter_3()
