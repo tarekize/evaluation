@@ -1,3 +1,17 @@
+from collections.abc import Iterable, Iterator
+
+class Matter1Iterator(Iterator):
+    def __init__(self, students):
+        self.sorted_students = sorted(students, key=lambda x: x.subject1, reverse=True)
+        self.index = 0
+
+    def __next__(self):
+        if self.index >= len(self.sorted_students):
+            raise StopIteration
+        student = self.sorted_students[self.index]
+        self.index += 1
+        return student
+
 class Student:
     def __init__(self, name, subject1, subject2, subject3):
         self.name = name
@@ -9,33 +23,22 @@ class Student:
     def average(self):
         return (self.subject1 + self.subject2 + self.subject3) / 3
 
-class SchoolClass:
+class SchoolClass(Iterable):
     def __init__(self):
         self.students = []
 
     def add_student(self, student: Student):
         self.students.append(student)
 
-    def rank_matter_1(self):
-        print("--- Classement Matière 1 ---")
-        for s in sorted(self.students, key=lambda x: x.subject1, reverse=True):
-            print(f"{s.name} : {s.subject1}")
-
-    def rank_matter_2(self):
-        print("--- Classement Matière 2 ---")
-        for s in sorted(self.students, key=lambda x: x.subject2, reverse=True):
-            print(f"{s.name} : {s.subject2}")
-
-    def rank_matter_3(self):
-        print("--- Classement Matière 3 ---")
-        for s in sorted(self.students, key=lambda x: x.subject3, reverse=True):
-            print(f"{s.name} : {s.subject3}")
+    def __iter__(self):
+        return Matter1Iterator(self.students)
 
 if __name__ == '__main__':
     school_class = SchoolClass()
     school_class.add_student(Student('J', 10, 12, 13))
     school_class.add_student(Student('A', 8, 2, 17))
     school_class.add_student(Student('V', 9, 14, 14))
-    school_class.rank_matter_1()
-    school_class.rank_matter_2()
-    school_class.rank_matter_3()
+    
+    print("--- Parcours avec l'Itérateur (Matière 1) ---")
+    for student in school_class:
+        print(f"{student.name} : {student.subject1}")
