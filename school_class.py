@@ -36,6 +36,18 @@ class Matter3Iterator(Iterator):
         self.index += 1
         return student
 
+def add_subject_4(cls):
+    """Décorateur de classe qui ajoute une propriété subject4 avec une note par défaut"""
+    cls.subject4 = 10  # Note par défaut pour la matière 4
+    
+    @property
+    def new_average(self):
+        return (self.subject1 + self.subject2 + self.subject3 + self.subject4) / 4
+        
+    cls.average = new_average
+    return cls
+
+@add_subject_4
 class Student:
     def __init__(self, name, subject1, subject2, subject3):
         self.name = name
@@ -80,3 +92,7 @@ if __name__ == '__main__':
     print("\n--- Parcours avec l'Itérateur (Matière 3) ---")
     for student in school_class.iter_matter_3():
         print(f"{student.name} : {student.subject3}")
+
+    print("\n--- Vérification de la Matière 4 et de la nouvelle moyenne ---")
+    for student in school_class.students:
+        print(f"{student.name} - Mat4: {student.subject4} - Moyenne (sur 4): {student.average:.2f}")
